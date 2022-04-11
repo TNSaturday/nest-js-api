@@ -33,12 +33,26 @@ export class AuthService {
 
     }
 
-    signin(dto: AuthDto) {
-        console.log({
-            dto,
+    async signin(dto: AuthDto) {
+        const user = await this.prisma.user.findUnique({
+            where: {
+                // @ts-ignore
+                email: dto.email,
+            }
         });
-        return {
-            message: 'Sign in!',
-        };
+
+        if (!user) {
+            throw new ForbiddenException('User with such email doesn\'t exist');
+        }
+
+        const pwMatches = await argon.verify(user.hash, dto.password);
+
+        if (!pwMatches) {
+            throw new ForbiddenException('Incorrect password');
+        }
+
+        delete user.hash;
+
+        return user;
     }
 }
