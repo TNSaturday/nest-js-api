@@ -4,6 +4,7 @@ import { AppModule } from '../src/app.module';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { PrismaService } from '../src/prisma/prisma.service';
 import { AuthDto } from '../src/auth/dto';
+import { EditUserDto } from '../src/user/dto';
 
 describe('App e2e', () => {
     let app: INestApplication;
@@ -110,13 +111,8 @@ describe('App e2e', () => {
                   .withHeaders({
                       Authorization: 'Bearer $S{userAccessToken}'
                   })
-                  .expectStatus(200)
-                  .inspect();
+                  .expectStatus(200);
             });
-        });
-
-        describe('Edit user', () => {
-            it.todo('Should eit user');
         });
     });
 
